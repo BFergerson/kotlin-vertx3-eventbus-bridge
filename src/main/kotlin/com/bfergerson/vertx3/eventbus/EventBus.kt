@@ -130,6 +130,19 @@ class EventBus(val url: String, options: EventBusOptions = EventBusOptions()) {
      *
      * @param {String} address
      * @param {Object} message
+     * @param {Function} [callback]
+     */
+    fun send(
+        address: String,
+        message: dynamic,
+        callback: ((Json?, Json?) -> Unit)?
+    ) = send(address, message, null, callback)
+
+    /**
+     * Send a message
+     *
+     * @param {String} address
+     * @param {Object} message
      * @param {Object} [headers]
      * @param {Function} [callback]
      */
@@ -143,11 +156,6 @@ class EventBus(val url: String, options: EventBusOptions = EventBusOptions()) {
         if (state != EventBusStatus.OPEN) {
             throw Error("INVALID_STATE_ERR")
         }
-
-//        if (typeof headers === "function") {
-//            callback = headers;
-//            headers = {};
-//        }
 
         val envelope = json(
             "type" to "send",
@@ -164,6 +172,17 @@ class EventBus(val url: String, options: EventBusOptions = EventBusOptions()) {
 
         sockJSConn!!.send(JSON.stringify(envelope))
     }
+
+    /**
+     * Publish a message
+     *
+     * @param {String} address
+     * @param {Object} message
+     */
+    fun publish(
+        address: String,
+        message: Any
+    ) = publish(address, message, null)
 
     /**
      * Publish a message
@@ -194,6 +213,17 @@ class EventBus(val url: String, options: EventBusOptions = EventBusOptions()) {
      * Register a new handler
      *
      * @param {String} address
+     * @param {Function} callback
+     */
+    fun registerHandler(
+        address: String,
+        callback: ((error: Json?, message: Json?) -> Unit)
+    ) = registerHandler(address, null, callback)
+
+    /**
+     * Register a new handler
+     *
+     * @param {String} address
      * @param {Object} [headers]
      * @param {Function} callback
      */
@@ -206,11 +236,6 @@ class EventBus(val url: String, options: EventBusOptions = EventBusOptions()) {
         if (state != EventBusStatus.OPEN) {
             throw Error("INVALID_STATE_ERR")
         }
-
-//        if (typeof headers === 'function') {
-//        callback = headers;
-//        headers = {};
-//    }
 
         // ensure it is an array
         if (handlers[address] == null) {
@@ -234,6 +259,17 @@ class EventBus(val url: String, options: EventBusOptions = EventBusOptions()) {
      * Unregister a handler
      *
      * @param {String} address
+     * @param {Function} callback
+     */
+    fun unregisterHandler(
+        address: String,
+        callback: (() -> Unit)?
+    ) = unregisterHandler(address, null, callback)
+
+    /**
+     * Unregister a handler
+     *
+     * @param {String} address
      * @param {Object} [headers]
      * @param {Function} callback
      */
@@ -245,11 +281,6 @@ class EventBus(val url: String, options: EventBusOptions = EventBusOptions()) {
 
         val handlers = handlers[address]
         if (handlers != null) {
-//            if (typeof headers === 'function') {
-//                callback = headers;
-//                headers = {};
-//            }
-
             val idx = handlers.indexOf(callback)
             if (idx != -1) {
                 handlers.removeAt(idx)
