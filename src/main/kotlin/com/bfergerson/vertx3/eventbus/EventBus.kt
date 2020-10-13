@@ -130,6 +130,17 @@ class EventBus(val url: String, options: EventBusOptions = EventBusOptions()) {
      *
      * @param {String} address
      * @param {Object} message
+     */
+    fun send(
+        address: String,
+        message: dynamic
+    ) = send(address, message, null, null)
+
+    /**
+     * Send a message
+     *
+     * @param {String} address
+     * @param {Object} message
      * @param {Function} [callback]
      */
     fun send(
