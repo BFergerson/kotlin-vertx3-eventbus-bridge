@@ -1,8 +1,4 @@
 jdk:
   - openjdk11
 install:
-  - ./gradlew clean build
-  - echo "VERSION:${version}"
-  - mkdir -p ~/.m2/repository/com/github/bfergerson/vertx3/eventbus/vertx3-eventbus-client/${VERSION}
-  - cp build/libs/vertx3-eventbus-client-1.0-SNAPSHOT.jar ~/.m2/repository/com/github/bfergerson/vertx3/eventbus/vertx3-eventbus-client/${VERSION}/vertx3-eventbus-client-1.0-SNAPSHOT.jar
-  - cp build/libs/vertx3-eventbus-client-js-1.0-SNAPSHOT-sources.jar ~/.m2/repository/com/github/bfergerson/vertx3/eventbus/vertx3-eventbus-client/${VERSION}/vertx3-eventbus-client-js-1.0-SNAPSHOT-sources.jar
+  - ./gradlew clean build publishToMavenLocal

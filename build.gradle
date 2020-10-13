@@ -1,8 +1,9 @@
 plugins {
     id 'org.jetbrains.kotlin.js' version '1.4.10'
+    id("maven-publish")
 }
 
-group 'org.example'
+group 'com.github.bfergerson.vertx3.eventbus'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -22,5 +23,21 @@ kotlin {
         useCommonJs()
         browser()
         binaries.executable()
+    }
+
+    configure([js()]) {
+        mavenPublication { targetPublication ->
+            tasks.withType(AbstractPublishToMaven)
+                    .matching { it.publication == targetPublication }
+                    .all { onlyIf { findProperty("isMainHost") == "true" } }
+        }
+    }
+}
+
+publishing {
+    publications {
+        gpr(MavenPublication) {
+            from(components.kotlin)
+        }
     }
 }
