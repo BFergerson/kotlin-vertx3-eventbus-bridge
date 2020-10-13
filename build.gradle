@@ -1,0 +1,26 @@
+plugins {
+    id 'org.jetbrains.kotlin.js' version '1.4.10'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-js"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-common"
+    implementation(npm('sockjs-client', '1.4', true))
+
+    testImplementation "org.jetbrains.kotlin:kotlin-test-js"
+}
+
+kotlin {
+    js {
+        useCommonJs()
+        browser()
+        binaries.executable()
+    }
+}
